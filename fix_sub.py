@@ -48,101 +48,97 @@ def fix_subs(file_name):
         if not next_sub.text.strip():
             sub.end = next_sub.end
             next_sub.start = next_sub.end
-        for name in NAMES:
-            if name in sub.text:
-                if file_name not in NAME_PER_FILE:
-                    NAME_PER_FILE[file_name] = set()
-                NAME_PER_FILE[file_name].add(name)
 
 
-        # found  = re.search(r"^[^とん]。", next_sub.text)
-
-        # if found and len(next_sub.text) > 5:
-        #     print("-"*30)
-        #     print(file_name)
-        #     print(sub.start)
-        #     print(sub.text)
-        #     print(next_sub.text) 
-        #     print(f"|{found.group()}|")
-        #     print("-"*30)
-        #     print("\n") 
+        # found  = re.search(r"^[」。、]", next_sub.text)
+        # found1 = re.search(rf"[^。、]$", sub.text)
+        if found: # and len(next_sub.text) > 10 and found1:
+            print("-"*30)
+            print(file_name)
+            print(sub.start)
+            print(sub.text)
+            print(next_sub.text) 
+            print(f"|{found.group()}|")
+            print("-"*30)
+            print("\n")             
             
-                        
-        #     sub.text = sub.text + next_sub.text[:found.span()[1]] 
-        #     next_sub.text = next_sub.text[found.span()[1]:] 
-            
-        #     print(sub.text)
-        #     print(next_sub.text) 
-        #     print("\n") 
-        
-        for full_name in NAMES[file_name]:
-            for length in range(len(full_name), -1, -1):
+            # move back 
 
-                last = full_name[-length:]
-                without = full_name[:-length]
-                
-                if len(full_name) <= length:
-                    continue
+            sub.text = sub.text + next_sub.text[:found.span()[1]] 
+            next_sub.text = next_sub.text[found.span()[1]:] 
 
-                particles = r"(も|じゃ(のう?|な|よ)?|よね?な?|・|まで|から?(したら|に?は)?|に(とって)?(対して)?は?|は|の((よう(な|に)?)|こと[をが]?)?|が|を|と(?!し)は?|への|で(さえ|も)?|や(もしれない|りも?)?)"
-                particles_and_or_symbol = rf"(({particles})?[、。！？!?ー─―」』…・）]+|{particles})"
+            # move to next 
+            # next_sub.text = sub.text[found.span()[0]:] + next_sub.text 
+            # sub.text = sub.text[:found.span()[0]] 
+
+            sub.end -= 200
+            next_sub.start -= 200
+
+            print(sub.text)
+            print(next_sub.text) 
+            print("\n") 
+            print("\n")
+
+        # for full_name in NAMES[file_name]
+        #     for length in range(len(full_name), -1, -1):
+
+        #         last = full_name[-length:]
+        #         without = full_name[:-length]
                 
-                if length == 0 and sub.text.endswith(full_name):
+        #         if len(full_name) <= length:
+        #             continue
+
+        #         particles = r"(も|じゃ(のう?|な|よ)?|よね?な?|・|まで|から?(したら|に?は)?|に(とって)?(対して)?は?|は|の((よう(な|に)?)|こと[をが]?)?|が|を|と(?!し)は?|への|で(?!きる)(さえ|も|)?|や(もしれない|りも?)?)"
+        #         particles_and_or_symbol = rf"(({particles})?[、。！？!?ー─―」』…・）]+|{particles})"
+                
+        #         if length == 0 and sub.text.endswith(full_name):
                     
-                    found = re.search(fr"^{particles_and_or_symbol}", next_sub.text)
-                    if not found:
-                        continue
-                    if not found.group():
-                        continue
-                    print("Particles")
-                    print(file_name)
-                    print(sub.text)
-                    print(next_sub.text) 
-                    print(length, last, without)
-                    print(found.group())
-                    print("\n") 
-                    sub.text = sub.text + next_sub.text[:found.span()[1]] 
-                    next_sub.text = next_sub.text[found.span()[1]:] 
-                    print(sub.text)
-                    print(next_sub.text) 
-                    print(length, last, without)
-                    print("\n") 
-                    print("\n")
+        #             found = re.search(fr"^{particles_and_or_symbol}", next_sub.text)
+        #             if not found:
+        #                 continue
+        #             if not found.group():
+        #                 continue
+        #             print("Particles")
+        #             print(file_name)
+        #             print(sub.text)
+        #             print(next_sub.text) 
+        #             print(length, last, without)
+        #             print(found.group())
+        #             print("\n") 
+        #             sub.text = sub.text + next_sub.text[:found.span()[1]] 
+        #             next_sub.text = next_sub.text[found.span()[1]:] 
+        #             print(sub.text)
+        #             print(next_sub.text) 
+        #             print(length, last, without)
+        #             print("\n") 
+        #             print("\n")
 
-                elif sub.text.endswith(without) and next_sub.text.startswith(last) and length != 0:
-                    print("Name broken")
-                    if length == 0 and next_sub.text.startswith(full_name):
-                        continue
-                    found = re.search(fr"^{last}({particles_and_or_symbol})?", next_sub.text)
-                    if not found:
-                        print(next_sub.text)
-                        print(fr"^{last}{particles_and_or_symbol}")
-                        raise IndexError
-                    print(file_name)
-                    print(sub.text)
-                    print(next_sub.text) 
-                    print(length, last, without)
-                    print("\n") 
-                    sub.text = sub.text + next_sub.text[:found.span()[1]] 
-                    next_sub.text = next_sub.text[found.span()[1]:] 
-                    print(sub.text)
-                    print(next_sub.text) 
-                    print(length, last, without)
-                    print("\n") 
-                    print("\n")
+        #         elif sub.text.endswith(without) and next_sub.text.startswith(last) and length != 0:
+        #             print("Name broken")
+        #             if length == 0 and next_sub.text.startswith(full_name):
+        #                 continue
+        #             found = re.search(fr"^{last}({particles_and_or_symbol})?", next_sub.text)
+        #             if not found:
+        #                 print(next_sub.text)
+        #                 print(fr"^{last}{particles_and_or_symbol}")
+        #                 raise IndexError
+        #             print(file_name)
+        #             print(sub.text)
+        #             print(next_sub.text) 
+        #             print(length, last, without)
+        #             print("\n") 
+        #             sub.text = sub.text + next_sub.text[:found.span()[1]] 
+        #             next_sub.text = next_sub.text[found.span()[1]:] 
+        #             print(sub.text)
+        #             print(next_sub.text) 
+        #             print(length, last, without)
+        #             print("\n") 
+        #             print("\n")
                    
 
 
 
         
-        # move back 
-
-        # sub.text = sub.text + next_sub.text[:found.span()[1]] 
-        # next_sub.text = next_sub.text[found.span()[1]:] 
-
-        # move to next 
-        # next_sub.text = sub.text[found.span()[0]:] + next_sub.text 
-        # sub.text = sub.text[:found.span()[0]] 
         if not next_sub.text.strip():
             sub.end = next_sub.end
             next_sub.start = next_sub.end
@@ -193,28 +189,40 @@ def process_file(filename):
 
 
 if __name__ == "__main__":
-    file_path = '15 - 暦物語 2 早見 沙織.srt'
+    file_path = '29 - 死物語 下 加藤 英美里.srt'
     HOUR = 3_600_000
     MINUTE = 60_000
     SECOND = 1000
     first = 4 * HOUR + 0 * MINUTE + 19 * SECOND
-    # shift_subs(file_path, "00:00:00,000", -400)
+    # subs = pysrt.open(file_path)
+    # s = subs[2954]
+
+    # print(s.index)
+    # s.start = pysrt.SubRipTime.from_string("02:33:11,000")
+    # s.end = pysrt.SubRipTime.from_string("02:33:12,880")
+    # s.text = "００７"
+    # subs.insert(2956, s)
+        # for i in range(2955, len(subs)):
+        # subs[i].index += 1
+    # subs.save(file_path, encoding='utf-8')
+
+    # shift_subs(file_path, "00:00:00,000", -1*MINUTE+14*SECOND)
 
     # split_and_shift_srt(file_path, [first])
 
     # srt_files = [f for f in os.listdir("./") if f.endswith(".srt")]
 
     # with ThreadPoolExecutor() as executor:
-    #     executor.map(process_file, srt_files)
+        # executor.map(process_file, srt_files)
     # 06 - 偽物語 下 坂本 真綾.srt
-    files = [x for x in os.listdir("./") if x.endswith(".srt")]
-    file_amount = len(files)
-    for i, filename in enumerate(files):
-        if filename.endswith(".srt"): 
-            full_path = os.path.join("./", filename)
-            if os.path.isfile(full_path): 
-                # a = re.search(r"\d\d - (.+?(?: [下中上])?) ", full_path)
-                # if a:
-                #     print(f"\"{a.groups(1)[0]}\"", end=", ")
-                fix_subs(full_path)
-                print(f"Finished [{round(100*(i+1)/file_amount, 2)}%]")
+    # files = [x for x in os.listdir("./") if x.endswith(".srt")]
+    # file_amount = len(files)
+    # for i, filename in enumerate(files):
+    #     if filename.endswith(".srt"): 
+    #         full_path = os.path.join("./", filename)
+    #         if os.path.isfile(full_path): 
+    #             # a = re.search(r"\d\d - (.+?(?: [下中上])?) ", full_path)
+    #             # if a:
+    #             #     print(f"\"{a.groups(1)[0]}\"", end=", ")
+    #             fix_subs(full_path)
+    #             print(f"Finished [{round(100*(i+1)/file_amount, 2)}%]")

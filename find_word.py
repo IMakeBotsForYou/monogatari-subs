@@ -40,11 +40,13 @@ while 1:
                 file.append(sub)
 
 
-            # # Shift the timestamps of each part
+            # Shift the timestamps of each part
             last = None
             for sub, next_sub in zip(file, file[1:]):
                 if regex:
                     result = pattern.search(sub.text)
+                    if not result:
+                        pattern.search(sub.text+"\n"+next_sub.text)
                     if result:
                         print_long(filename[:-4], 40)
                         if last:
@@ -56,12 +58,25 @@ while 1:
                         print("ー" * 35)
                         count += 1
                 else:
-                    for length in range(len(pattern), 0, -1):
+                    if pattern in sub.text:
+                        print(filename)
+                        if last:
+                            print(str(last.start)[:-4], last.text)  
+                        else:
+                            print("[Start of file]")
+                        print(str(sub.start)[:-4], highlight(sub.text, pattern))
+                        print(str(next_sub.start)[:-4], next_sub.text)
+                        print("ー" * 35)
+                        count += 1 
+                        continue
+
+                    for length in range(len(pattern)-1, 0, -1):
                         last_chars = pattern[-length:]
                         without = pattern[:-length]
                         if len(pattern) <= length:
                             continue
                         if sub.text.endswith(without) and next_sub.text.startswith(last_chars):
+                            print(filename)
                             if last:
                                 print(str(last.start)[:-4], last.text)  
                             else:
@@ -70,8 +85,9 @@ while 1:
                             print(str(next_sub.start)[:-4], highlight(next_sub.text, last_chars))
                             print("ー" * 35)
                             count += 1 
+                            continue
 
                 last = sub
 
-    print(f"Encountered {count} {'times' if count > 1 else 'time'}")
+    print(f"Encountered {count} {'time' if count == 1 else 'times'}")
     count = 0

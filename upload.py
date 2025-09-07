@@ -95,8 +95,8 @@ def main():
     SECOND = 1
     MINUTE = 60 * SECOND
     HOUR = 60 * MINUTE
-    # countdown(12 * HOUR)
-    for video_id, title in videos[:29]:
+    countdown(12 * HOUR)
+    for video_id, title in videos[22:]:
         safe_title = sanitize_title(title)
         srt_path = os.path.join(SRT_FOLDER, f"{safe_title}.srt")
 
@@ -124,6 +124,5 @@ def countdown(seconds):
         sleep(1)
     sys.stdout.write("\rTime's up!            \n")  # overwrite the line         \n")  # Add spaces to overwrite the previous text
 
-# Example usage: 10-second timer
 if __name__ == "__main__":
     main()
