@@ -25,7 +25,7 @@ def find_sentences_for_pattern(args):
     print()
     print(pattern)
 
-    while remove > len(pattern) - 2 and remove >= 1:
+    while remove > len(pattern) - 2 and remove > len(pattern)//2:
         for video_count, subs in enumerate(srts):
             video_id = video_ids[video_count]
             fix_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
@@ -52,8 +52,8 @@ def find_sentences_for_pattern(args):
                     if count >= MAX_HITS:
                         # print(f"{remove}, {pattern[:remove]}/{pattern[remove:]}")
                         print(text)
-                        print(fix_subs_link)
                         print(current_time)
+                        print(fix_subs_link)
                         print("")
                 last = sub
         remove -= 1
