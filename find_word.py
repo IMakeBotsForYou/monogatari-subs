@@ -36,7 +36,6 @@ while 1:
         if filename.endswith("srt"):
             full_path = os.path.join("./", filename)
             video_id = video_ids[file_count]
-            edit_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             fix_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             subs = pysrt.open(full_path)
 

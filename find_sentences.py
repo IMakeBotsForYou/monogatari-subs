@@ -26,12 +26,16 @@ def find_sentences_for_pattern(args):
     print(pattern)
 
     while remove > len(pattern) - 2 and remove >= 1:
-        for video_count, subs in enumrate(srts):
+        for video_count, subs in enumerate(srts):
             video_id = video_ids[video_count]
-            edit_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             fix_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             last = None
             for sub, next_sub in zip(subs, subs[1:]):
+                hours = sub.start.hours*3600
+                minutes = sub.start.minutes*60
+                seconds = sub.start.seconds
+                seconds = seconds-1 if seconds > 0 else 0
+                current_time = f"https://www.youtube.com/watch?v={video_id}&t={hours+minutes+seconds}"
                 if pattern[:remove] in sub.text and sub.text not in cache:
                     text = ""
                     if last:
@@ -46,17 +50,18 @@ def find_sentences_for_pattern(args):
                     count += 1
                     
                     if count >= MAX_HITS:
-                        print(f"{remove}, {pattern[:remove]}/{pattern[remove:]}")
-                        print("<hr>".join(hits))
+                        # print(f"{remove}, {pattern[:remove]}/{pattern[remove:]}")
+                        print(text)
                         print(edit_subs_link)
-                        print(fix_subs_link)
+                        print(current_time)
+                        print("")
                 last = sub
         remove -= 1
-    
+    print("_"*50)
     print(pattern)
     print("<hr>".join(hits))
-    print(edit_subs_link)
-    print(fix_subs_link)
+    # print(edit_subs_link)
+    # print(fix_subs_link)
 
 
 # def main():
@@ -81,4 +86,4 @@ def find_sentences_for_pattern(args):
 if __name__ == "__main__":
     srts = load_all_srts("./")
     while True:
-        print(find_sentences_for_pattern(((input("> ")), srts))[1])
+        find_sentences_for_pattern(((input("> ")), srts))
