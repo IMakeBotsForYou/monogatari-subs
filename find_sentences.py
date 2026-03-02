@@ -52,7 +52,7 @@ def find_sentences_for_pattern(args):
                     if count >= MAX_HITS:
                         # print(f"{remove}, {pattern[:remove]}/{pattern[remove:]}")
                         print(text)
-                        print(edit_subs_link)
+                        print(fix_subs_link)
                         print(current_time)
                         print("")
                 last = sub
@@ -60,8 +60,6 @@ def find_sentences_for_pattern(args):
     print("_"*50)
     print(pattern)
     print("<hr>".join(hits))
-    # print(edit_subs_link)
-    # print(fix_subs_link)
 
 
 # def main():
