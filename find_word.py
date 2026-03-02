@@ -1,6 +1,8 @@
 import os
 import pysrt
 import re
+from video_ids import video_ids
+import pysrt
 
 def print_long(string, length):
     total_length = length
@@ -15,6 +17,9 @@ RESET = '\033[0m'
 def highlight(text, word):
     return text.replace(word, f"{HIGHLIGHT_BG}{word}{RESET}")
 
+def get_time(sub):
+    return ""
+
 while 1:
     regex = input("Regex? Y/n")
     if regex != "Y":
@@ -26,10 +31,13 @@ while 1:
         pattern = input('Name to look for > ')
 
     count = 0
+    file_count = 0
     for filename in os.listdir("./"):
         if filename.endswith("srt"):
             full_path = os.path.join("./", filename)
-
+            video_id = video_ids[file_count]
+            edit_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
+            fix_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             subs = pysrt.open(full_path)
 
             # Create SRT files for each part
@@ -43,6 +51,14 @@ while 1:
             # Shift the timestamps of each part
             last = None
             for sub, next_sub in zip(file, file[1:]):
+
+                hours = sub.start.hours*3600
+                minutes = sub.start.minutes*60
+                seconds = sub.start.seconds
+                seconds = seconds-1 if seconds > 0 else 0
+                current_time = f"https://www.youtube.com/watch?v={video_id}&t={hours+minutes+seconds}"
+
+
                 if regex:
                     result = pattern.search(sub.text)
                     if not result:
@@ -55,6 +71,8 @@ while 1:
                             print("[Start of file]")
                         print(str(sub.start)[:-4], highlight(sub.text, result.group()))
                         print(str(next_sub.start)[:-4], highlight(next_sub.text, result.group()))
+                        print("Link to Video:\t",current_time)
+                        print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
                         count += 1
                 else:
@@ -66,6 +84,8 @@ while 1:
                             print("[Start of file]")
                         print(str(sub.start)[:-4], highlight(sub.text, pattern))
                         print(str(next_sub.start)[:-4], next_sub.text)
+                        print("Link to Video:\t",current_time)
+                        print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
                         count += 1 
                         continue
@@ -83,11 +103,14 @@ while 1:
                                 print("[Start of file]")
                             print(str(sub.start)[:-4], highlight(sub.text, without))
                             print(str(next_sub.start)[:-4], highlight(next_sub.text, last_chars))
+                            print("Link to Video:\t",current_time)
+                            print("Edit Subs:\t",fix_subs_link)
                             print("ー" * 35)
                             count += 1 
                             continue
 
                 last = sub
+            file_count += 1
 
     print(f"Encountered {count} {'time' if count == 1 else 'times'}")
     count = 0
