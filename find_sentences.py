@@ -48,13 +48,13 @@ def find_sentences_for_pattern(args):
                     cache.add(sub.text)
                     hits.append(text)
                     count += 1
-                    
+                    print(text)
+                    print(current_time)
+                    print(fix_subs_link)
+                    print("")
                     if count >= MAX_HITS:
                         # print(f"{remove}, {pattern[:remove]}/{pattern[remove:]}")
-                        print(text)
-                        print(current_time)
-                        print(fix_subs_link)
-                        print("")
+                        break
                 last = sub
         remove -= 1
     print("_"*50)
