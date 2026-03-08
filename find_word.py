@@ -14,13 +14,20 @@ def print_long(string, length):
 
 HIGHLIGHT_BG = '\033[43m'  # Yellow background
 RESET = '\033[0m'
-def highlight(text, word):
+
+def highlight(text, word, anki=False):
+    if anki:
+        return text.replace(word, f"<span style='color: #aa88aa'>{word}</span>")
     return text.replace(word, f"{HIGHLIGHT_BG}{word}{RESET}")
 
 def get_time(sub):
     return ""
 
+
+
+
 while 1:
+    sentences = []
     regex = input("Regex? Y/n")
     if regex != "Y":
         regex = False
@@ -64,12 +71,23 @@ while 1:
                         pattern.search(sub.text+"\n"+next_sub.text)
                     if result:
                         print_long(filename[:-4], 40)
+                        add_sentence = ""
                         if last:
                             print(str(last.start)[:-4], highlight(last.text, result.group()))
+                            add_sentence += highlight(last.text, result.group(), anki=True)
                         else:
                             print("[Start of file]")
+
+
                         print(str(sub.start)[:-4], highlight(sub.text, result.group()))
                         print(str(next_sub.start)[:-4], highlight(next_sub.text, result.group()))
+
+                        add_sentence += "\n" + highlight(sub.text, result.group(), anki=True)
+                        add_sentence += "\n" + highlight(next_sub.text, result.group(), anki=True)
+
+                        if len(sentences) <= 3:
+                            sentences.append(add_sentence)
+
                         print("Link to Video:\t",current_time)
                         print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
@@ -77,12 +95,23 @@ while 1:
                 else:
                     if pattern in sub.text:
                         print(filename)
+                        add_sentence = ""
                         if last:
                             print(str(last.start)[:-4], last.text)  
+                            add_sentence += highlight(last.text, last.text, anki=True)
                         else:
                             print("[Start of file]")
+
                         print(str(sub.start)[:-4], highlight(sub.text, pattern))
                         print(str(next_sub.start)[:-4], next_sub.text)
+
+                        add_sentence += "\n" + highlight(sub.text, pattern, anki=True)
+                        add_sentence += "\n" + highlight(next_sub.text, pattern, anki=True)
+
+                        if len(sentences) < 3:
+                            sentences.append(add_sentence)
+
+
                         print("Link to Video:\t",current_time)
                         print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
@@ -112,4 +141,6 @@ while 1:
             file_count += 1
 
     print(f"Encountered {count} {'time' if count == 1 else 'times'}")
+    print("-"*30)
+    print("<hr>".join(sentences))
     count = 0
