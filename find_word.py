@@ -24,8 +24,6 @@ def get_time(sub):
     return ""
 
 
-
-
 while 1:
     sentences = []
     regex = input("Regex? Y/n")
@@ -74,7 +72,7 @@ while 1:
                         add_sentence = ""
                         if last:
                             print(str(last.start)[:-4], highlight(last.text, result.group()))
-                            add_sentence += highlight(last.text, result.group(), anki=True)
+                            add_sentence += highlight(last.text, result.group(), anki=True) + "<br>"
                         else:
                             print("[Start of file]")
 
@@ -82,8 +80,8 @@ while 1:
                         print(str(sub.start)[:-4], highlight(sub.text, result.group()))
                         print(str(next_sub.start)[:-4], highlight(next_sub.text, result.group()))
 
-                        add_sentence += "\n" + highlight(sub.text, result.group(), anki=True)
-                        add_sentence += "\n" + highlight(next_sub.text, result.group(), anki=True)
+                        add_sentence += highlight(sub.text, result.group(), anki=True) + "<br>"
+                        add_sentence += highlight(next_sub.text, result.group(), anki=True)  
 
                         if len(sentences) <= 3:
                             sentences.append(add_sentence)
@@ -98,15 +96,15 @@ while 1:
                         add_sentence = ""
                         if last:
                             print(str(last.start)[:-4], last.text)  
-                            add_sentence += highlight(last.text, last.text, anki=True)
+                            add_sentence += highlight(last.text, pattern, anki=True) + "<br>"
                         else:
                             print("[Start of file]")
 
                         print(str(sub.start)[:-4], highlight(sub.text, pattern))
                         print(str(next_sub.start)[:-4], next_sub.text)
 
-                        add_sentence += "\n" + highlight(sub.text, pattern, anki=True)
-                        add_sentence += "\n" + highlight(next_sub.text, pattern, anki=True)
+                        add_sentence +=  highlight(sub.text, pattern, anki=True) + "<br>"
+                        add_sentence +=  highlight(next_sub.text, pattern, anki=True)
 
                         if len(sentences) < 3:
                             sentences.append(add_sentence)
@@ -118,7 +116,7 @@ while 1:
                         count += 1 
                         continue
 
-                    for length in range(len(pattern)-1, 0, -1):
+                    # for length in range(len(pattern)-1, 0, -1):
                         last_chars = pattern[-length:]
                         without = pattern[:-length]
                         if len(pattern) <= length:
