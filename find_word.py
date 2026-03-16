@@ -139,6 +139,7 @@ while 1:
             file_count += 1
 
     print(f"Encountered {count} {'time' if count == 1 else 'times'}")
-    print("-"*30)
-    print("<hr>".join(sentences))
+    if sentences:
+        print("-"*30)
+        print("<hr>".join(sentences))
     count = 0
