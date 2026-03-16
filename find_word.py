@@ -171,10 +171,20 @@ while 1:
                             print(filename)
                             if last:
                                 print(str(last.start)[:-4], last.text)  
+                                add_sentence +=  highlight(last.text, pattern, anki=True) + "<br>"
+                                
                             else:
                                 print("[Start of file]")
                             print(str(sub.start)[:-4], highlight(sub.text, without))
                             print(str(next_sub.start)[:-4], highlight(next_sub.text, last_chars))
+
+                            add_sentence +=  highlight(sub.text, pattern, anki=True) + "<br>"
+                            add_sentence +=  highlight(next_sub.text, pattern, anki=True)
+                          
+                            if len(sentences) < example_sentence_limit:
+                                sentences.append(add_sentence)
+
+
                             print("Link to Video:\t",current_time)
                             # print("Edit Subs:\t",fix_subs_link)
                             print("ー" * 35)
