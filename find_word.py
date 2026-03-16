@@ -169,6 +169,7 @@ while 1:
                             continue
                         if sub.text.endswith(without) and next_sub.text.startswith(last_chars):
                             print(filename)
+                            add_sentence = ""
                             if last:
                                 print(str(last.start)[:-4], last.text)  
                                 add_sentence +=  highlight(last.text, pattern, anki=True) + "<br>"
