@@ -1,8 +1,49 @@
 import os
 import pysrt
 import re
-from video_ids import video_ids
+#from video_ids import video_ids
+
 import pysrt
+
+video_ids = {
+    "01   化物語 上 神谷 浩史.srt": "SERSaWm60bE",
+    "02   化物語 中 1 加藤 英美里.srt": "T70BPU0seTA",
+    "02   化物語 中 2 加藤 英美里.srt": "lYDodasbU3w",
+    "03   化物語 下 斎藤 千和.srt": "bCmiFTOVF8M",
+    "04   傷物語 1 井上 麻里奈.srt": "r6X3i5B36E4",
+    "04   傷物語 2 井上 麻里奈.srt": "H7CGgAggMys",
+    "05   偽物語 上 櫻井 孝宏.srt": "ztn4u2Ymsbw",
+    "06   偽物語 下 坂本 真綾.srt": "rkPT0vFpcDM",
+    "07   猫物語 黒 加藤 英美里.srt": "mM781AhuvzQ",
+    "08   猫物語 白 沢城 みゆき.srt": "8lO1ISyT9nM",
+    "09   傾物語 井口 裕香.srt": "Ht5OXUAkLV4",
+    "10   花物語 堀江 由衣.srt": "CBWSkgXxlyA",
+    "11   囮物語 三木 眞一郎.srt": "3PGp53TISnQ",
+    "12   鬼物語 喜多村 英梨.srt": "OZ3h8bfFLXc",
+    "13   恋物語 ゆきの さつき.srt": "TLBTzR0ULug",
+    "14   憑物語 白石 涼子.srt": "yCmHkMImQZ8",
+    "15   暦物語 1 早見 沙織.srt": "WFduj5rY2Mo",
+    "15   暦物語 2 早見 沙織.srt": "jce2NXJ8cU0",
+    "16   終物語 上 第1話 水橋 かおり.srt": "mzjda8VxUcU",
+    "16   終物語 上 第2話 水橋 かおり.srt": "yDIhe971VC0",
+    "16   終物語 上 第3話 水橋 かおり.srt": "xQlYLJhl7HE",
+    "17   終物語 中 斎藤 千和.srt": "z9bdKE8NAeQ",
+    "18   終物語 下 1 加藤 英美里.srt": "5xm1d0VC-sY",
+    "18   終物語 下 2 加藤 英美里.srt": "4r3qEpcZeQY",
+    "19   続・終物語 井上 麻里奈.srt": "GcARWSvzA5E",
+    "20   愚物語 櫻井 孝宏.srt": "7QaFZKrbLXw",
+    "21   業物語 三木 眞一郎.srt": "CFlOEA43Xlo",
+    "22   撫物語 ゆきの さつき.srt": "cXMntZaZBYI",
+    "23   結物語 花澤 香菜.srt": "DKhqmtrE2ak",
+    "24   忍物語 白石 涼子.srt": "eJASqnm4QlY",
+    "25   宵物語 ゆきの さつき.srt": "oUm5xL6FcBw",
+    "26   余物語 早見 沙織.srt": "Qoud12pThYI",
+    "27   扇物語 堀江 由衣.srt": "vybLXHoiLwg",
+    "28   死物語 上 白石 涼子.srt": "OXKP7zmml9M",
+    "29   死物語 下 加藤 英美里.srt": "t5nFhGtRCr0",
+    "30   戦物語 日笠 陽子.srt": "cJzc4dkRNjw"
+}
+
 
 # for HTML at the end
 example_sentence_limit = 3
@@ -43,7 +84,8 @@ while 1:
     for filename in os.listdir("./"):
         if filename.endswith("srt"):
             full_path = os.path.join("./", filename)
-            video_id = video_ids[file_count]
+            video_id = video_ids[filename]
+            # print(f'"{filename}": "{video_id}",')
             fix_subs_link = f"https://studio.youtube.com/video/{video_id}/translations"
             subs = pysrt.open(full_path)
 
@@ -90,7 +132,7 @@ while 1:
                             sentences.append(add_sentence)
 
                         print("Link to Video:\t",current_time)
-                        print("Edit Subs:\t",fix_subs_link)
+                        # print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
                         count += 1
                 else:
@@ -103,8 +145,8 @@ while 1:
                         else:
                             print("[Start of file]")
 
-                        print(str(sub.start)[:-4], highlight(sub.text, pattern))
-                        print(str(next_sub.start)[:-4], next_sub.text)
+                        # print(str(sub.start)[:-4], highlight(sub.text, pattern))
+                        # print(str(next_sub.start)[:-4], next_sub.text)
 
                         add_sentence +=  highlight(sub.text, pattern, anki=True) + "<br>"
                         add_sentence +=  highlight(next_sub.text, pattern, anki=True)
@@ -114,12 +156,13 @@ while 1:
 
 
                         print("Link to Video:\t",current_time)
-                        print("Edit Subs:\t",fix_subs_link)
+                        # print("Edit Subs:\t",fix_subs_link)
                         print("ー" * 35)
                         count += 1 
                         continue
 
-                    # for length in range(len(pattern)-1, 0, -1):
+                    # If you want to find words that are cut off
+                    for length in range(len(pattern)-1, 0, -1):
                         last_chars = pattern[-length:]
                         without = pattern[:-length]
                         if len(pattern) <= length:
@@ -133,7 +176,7 @@ while 1:
                             print(str(sub.start)[:-4], highlight(sub.text, without))
                             print(str(next_sub.start)[:-4], highlight(next_sub.text, last_chars))
                             print("Link to Video:\t",current_time)
-                            print("Edit Subs:\t",fix_subs_link)
+                            # print("Edit Subs:\t",fix_subs_link)
                             print("ー" * 35)
                             count += 1 
                             continue
@@ -142,6 +185,7 @@ while 1:
             file_count += 1
 
     print(f"Encountered {count} {'time' if count == 1 else 'times'}")
+    
     if sentences:
         print("-"*30)
         print("<hr>".join(sentences))
