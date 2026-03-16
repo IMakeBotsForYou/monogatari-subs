@@ -4,6 +4,9 @@ import re
 from video_ids import video_ids
 import pysrt
 
+# for HTML at the end
+example_sentence_limit = 3
+
 def print_long(string, length):
     total_length = length
     middle = f" {string} "
@@ -83,7 +86,7 @@ while 1:
                         add_sentence += highlight(sub.text, result.group(), anki=True) + "<br>"
                         add_sentence += highlight(next_sub.text, result.group(), anki=True)  
 
-                        if len(sentences) <= 3:
+                        if len(sentences) <= example_sentence_limit:
                             sentences.append(add_sentence)
 
                         print("Link to Video:\t",current_time)
@@ -106,7 +109,7 @@ while 1:
                         add_sentence +=  highlight(sub.text, pattern, anki=True) + "<br>"
                         add_sentence +=  highlight(next_sub.text, pattern, anki=True)
 
-                        if len(sentences) < 3:
+                        if len(sentences) < example_sentence_limit:
                             sentences.append(add_sentence)
 
 
