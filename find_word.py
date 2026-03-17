@@ -145,8 +145,8 @@ while 1:
                         else:
                             print("[Start of file]")
 
-                        # print(str(sub.start)[:-4], highlight(sub.text, pattern))
-                        # print(str(next_sub.start)[:-4], next_sub.text)
+                        print(str(sub.start)[:-4], highlight(sub.text, pattern))
+                        print(str(next_sub.start)[:-4], next_sub.text)
 
                         add_sentence +=  highlight(sub.text, pattern, anki=True) + "<br>"
                         add_sentence +=  highlight(next_sub.text, pattern, anki=True)
