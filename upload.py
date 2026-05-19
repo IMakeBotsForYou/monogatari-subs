@@ -10,7 +10,7 @@ from datetime import date
 CLIENT_SECRETS_FILE = "client_secret.json"  # OAuth2 credentials file
 SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 PLAYLIST_ID = "PL8zzso6aYp-BTpdl_1wWnegY92sDXBkbp"
-SRT_FOLDER = "./"  # folder containing VIDEO_ID.srt files
+SRT_FOLDER = "./物語シリーズ"  # folder containing VIDEO_ID.srt files
 # ---------------
 
 def get_authenticated_service():
@@ -68,7 +68,7 @@ import re
 def sanitize_title(title: str) -> str:
     """Make a safe filename from a video title."""
     # Remove illegal characters for filenames
-    safe = re.sub(r'[\\/*?:"<>|-]', "", title).replace("   ", " - ")
+    safe = re.sub(r'[\\/*?:"<>|-]', "", title)# .replace("   ", " - ")
     # Strip spaces at ends
     safe = safe.strip()
     return safe
@@ -95,8 +95,8 @@ def main():
     SECOND = 1
     MINUTE = 60 * SECOND
     HOUR = 60 * MINUTE
-    countdown(12 * HOUR)
-    for video_id, title in videos[22:]:
+    # countdown(12 * HOUR)
+    for video_id, title in [videos[0], videos[9], videos[10], videos[19], videos[29]] :
         safe_title = sanitize_title(title)
         srt_path = os.path.join(SRT_FOLDER, f"{safe_title}.srt")
 
